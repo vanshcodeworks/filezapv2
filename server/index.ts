@@ -1,9 +1,10 @@
 import { WebSocketServer , WebSocket } from "ws";
 import { genrateRoomCode } from "./utils/genrateroom";
 
-const wss = new WebSocketServer({
-  port: 8080,
-});
+
+const PORT = process.env.PORT || 8080;
+const wss = new WebSocketServer({ port: PORT });
+
 
 
 type Peer = {
