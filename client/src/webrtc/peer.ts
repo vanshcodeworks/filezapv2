@@ -66,6 +66,7 @@ function handleIceCandidate(event: RTCPeerConnectionIceEvent) {
 // =====================
 
 export async function createAndSendOffer() {
+  const pc = getPeerConnection();
   if (!pc) throw new Error("PeerConnection not created");
     if(isOfferer) return;
   const offer = await pc.createOffer();
@@ -86,9 +87,12 @@ export async function createAndSendAnswer() {
 }
 
 onPeerJoined(async () => {
+    const pc = getPeerConnection();
+  if (!pc) throw new Error("PeerConnection not created");
+
   if (isOfferer) return;
   isOfferer = true;
-
+  
   const offer = await pc.createOffer();
   await pc.setLocalDescription(offer);
   sendOffer(offer);

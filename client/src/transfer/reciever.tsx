@@ -1,4 +1,4 @@
-import { isChannelOpen , onMessage } from "../webrtc/datachannel";
+import { onMessage } from "../webrtc/datachannel";
 import { decodeMeta } from "./metadata";
 
 
@@ -30,6 +30,11 @@ onMessage((data)=>{
     // decryption logic
     receiveBuffer.push(data);
     receivedByte+= data.byteLength;
+    if (receivedByte >= expectedSize) {
+  const blob = new Blob(receiveBuffer);
+  onComplete(blob, fileName);
+  cleanup();
+}
 });
 }
 

@@ -24,7 +24,7 @@ function App() {
   const [downloadName, setDownloadName] = useState("");
 
   useEffect(() => {
-    connectSignaling("ws://localhost:8080");
+    connectSignaling("wss://filezapv2-production.up.railway.app/");
   }, []);
 
   useEffect(() => {

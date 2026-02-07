@@ -83,8 +83,14 @@ export function send(data: ArrayBuffer | string) {
   if (!dataChannel || dataChannel.readyState !== "open") {
     throw new Error("DataChannel not open");
   }
-  dataChannel.send(data);
+
+  if (typeof data === "string") {
+    dataChannel.send(data);
+  } else {
+    dataChannel.send(data);
+  }
 }
+
 
 export function onMessage(handler: MessageHandler) {
   messageHandler = handler;
