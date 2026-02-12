@@ -1,0 +1,19 @@
+{
+  "name": "data-server",
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.988.0",
+    "@aws-sdk/s3-request-presigner": "^3.988.0",
+    "@types/express": "^5.0.6",
+    "express": "^5.2.1",
+    "mongoose": "^9.2.1"
+  }
+}
