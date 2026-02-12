@@ -114,7 +114,3 @@ export function closeDataChannel() {
     dataChannel = null;
   }
 }
-
-export function getDataChannel() {
-  return dataChannel;
-}
