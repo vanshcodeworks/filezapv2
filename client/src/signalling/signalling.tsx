@@ -39,6 +39,7 @@ type PeerJoinedHandler = (payload: {
 
 let ws: WebSocket | null = null;
 let currentRoomId: string | null = null;
+let pendingRoomId: string | null = null;
 let peerId: string = crypto.randomUUID();
 
 // Event listeners (subscribers)
@@ -60,6 +61,7 @@ export function connectSignaling(url: string) {
 
   ws.onopen = () => {
     console.log("[signaling] WebSocket connected");
+    flushPendingRoomJoin();
   };
 
   ws.onclose = () => {
@@ -80,15 +82,10 @@ export function connectSignaling(url: string) {
 // =====================
 
 export function joinRoom(roomId: string) {
-  if (!ws) throw new Error("WebSocket not connected");
-
   currentRoomId = roomId;
+  pendingRoomId = roomId;
 
-  ws.send(JSON.stringify({
-    type: "join-room",
-    roomId,
-    peerId
-  }));
+  flushPendingRoomJoin();
 }
 
 
@@ -97,7 +94,7 @@ export function joinRoom(roomId: string) {
 // =====================
 
 export function sendOffer(sdp: RTCSessionDescriptionInit) {
-  if (!ws || !currentRoomId) return;
+  if (!ws || ws.readyState !== WebSocket.OPEN || !currentRoomId) return;
 
   ws.send(JSON.stringify({
     type: "offer",
@@ -108,7 +105,7 @@ export function sendOffer(sdp: RTCSessionDescriptionInit) {
 }
 
 export function sendAnswer(sdp: RTCSessionDescriptionInit) {
-  if (!ws || !currentRoomId) return;
+  if (!ws || ws.readyState !== WebSocket.OPEN || !currentRoomId) return;
 
   ws.send(JSON.stringify({
     type: "answer",
@@ -119,7 +116,7 @@ export function sendAnswer(sdp: RTCSessionDescriptionInit) {
 }
 
 export function sendIceCandidate(candidate: RTCIceCandidateInit) {
-  if (!ws || !currentRoomId) return;
+  if (!ws || ws.readyState !== WebSocket.OPEN || !currentRoomId) return;
 
   ws.send(JSON.stringify({
     type: "ice",
@@ -207,4 +204,21 @@ export function closeSignaling() {
     ws = null;
   }
   currentRoomId = null;
+  pendingRoomId = null;
+}
+
+function flushPendingRoomJoin() {
+  if (!ws || ws.readyState !== WebSocket.OPEN || !pendingRoomId) {
+    return;
+  }
+
+  ws.send(
+    JSON.stringify({
+      type: "join-room",
+      roomId: pendingRoomId,
+      peerId,
+    }),
+  );
+
+  pendingRoomId = null;
 }
