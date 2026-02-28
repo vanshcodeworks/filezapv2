@@ -23,12 +23,6 @@ const UserSchema = new mongoose.Schema(
       default: 0,
       min: 0,
     },
-
-    totalCount: { type: Number },
-    isPassword: { type: Boolean, default: false },
-    password: { type: String },
-    saveName: { type: String },
-    shortCode: { type: String, unique: true },
   },
   { timestamps: true }
 )
