@@ -1,13 +1,22 @@
-import crypto from "crypto"
+import bcrypt from "bcryptjs";
+import crypto from "crypto";
 
-export function hashOwnerKey(ownerKey: string) {
-  return crypto.createHash("sha256").update(ownerKey, "utf8").digest("hex")
+export async function hashOwnerKey(key: string): Promise<string> {
+  return bcrypt.hash(key, 10);
 }
 
-export function safeEqualHex(a: string, b: string) {
-    if (a.length !== b.length) return false;
-  const ab = Buffer.from(a, "hex")
-  const bb = Buffer.from(b, "hex")
-  if (ab.length !== bb.length) return false
-  return crypto.timingSafeEqual(ab, bb)
+export async function verifyOwnerKey(key: string, hash: string): Promise<boolean> {
+  return bcrypt.compare(key, hash);
+}
+
+export function safeEqualHex(a: string, b: string): boolean {
+  if (a.length !== b.length) return false;
+  try {
+    const ab = Buffer.from(a, "hex");
+    const bb = Buffer.from(b, "hex");
+    if (ab.length !== bb.length) return false;
+    return crypto.timingSafeEqual(ab, bb);
+  } catch {
+    return false;
+  }
 }
