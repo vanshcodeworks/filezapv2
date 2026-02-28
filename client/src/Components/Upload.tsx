@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { FileUp, Lock, Loader2 } from 'lucide-react';
 import { initUpload, putToPresignedUrl, completeUpload } from '../services/api';
 import { useAppState } from '../state/AppStateContext';
-import { theme } from '../theme/classes';
 
 export default function Upload() {
   const navigate = useNavigate();

@@ -30,7 +30,6 @@ export default function Home() {
   const [nameInput, setNameInput] = useState('');
   const [isConnecting, setIsConnecting] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
-  const [peersFound, setPeersFound] = useState(false);
   const [roomCode, setRoomCode] = useState('');
   const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
   const [downloadName, setDownloadName] = useState('');
@@ -66,7 +65,6 @@ export default function Home() {
     onDataChannelOpen(() => {
       setIsConnecting(false);
       setIsConnected(true);
-      setPeersFound(true);
       setP2pMessage('P2P connected. You can send files now.');
     });
   }, []);
@@ -154,7 +152,6 @@ export default function Home() {
     setRoomCode('');
     setP2pMessage('Saved room cleared. Create or join again.');
     setIsConnected(false);
-    setPeersFound(false);
   };
 
   const handleSendP2PFile = async () => {

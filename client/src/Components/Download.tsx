@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { FileText, Download as DownloadIcon, Loader2, Search, Lock } from 'lucide-react';
+import { FileText, Download as DownloadIcon, Loader2, Search } from 'lucide-react';
 import { getDownloadMeta, unlockDownload } from '../services/api';
-import { theme } from '../theme/classes';
 
 export default function Download() {
   const [searchParams, setSearchParams] = useSearchParams();
