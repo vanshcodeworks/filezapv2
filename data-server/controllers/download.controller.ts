@@ -1,7 +1,7 @@
 import type { Request, Response } from "express";
 import { getDownloadUrl, deleteObject } from "../utils/s3";
 import File from "../models/file.model";
-
+import { verifyFilePassword } from "../utils/password";
 export async function download(req: Request, res: Response) {
   try {
     const { shortCode } = req.params;
