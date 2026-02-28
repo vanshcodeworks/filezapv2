@@ -1,9 +1,23 @@
-import mongoose from "mongoose";
-import express from "express";
-import { home } from "../controllers/home.controller";
+import { Router } from "express";
+import { initUpload, completeUpload } from "../controllers/upload.controller";
+import { requireOwner } from "../midlewares/requireOwner.middleware";
+import { rateLimit, ipKey, deviceKey } from "../midlewares/rateLimit.middleware";
 
-const router = express.Router()
+const router = Router();
 
-router.get("/hey" , home)
+router.post(
+  "/init",
+  rateLimit({ key: (r) => `upl:ip:${ipKey(r)}`,  limit: 20, windowMs: 60_000 }),
+  rateLimit({ key: (r) => `upl:dv:${deviceKey(r)}`, limit: 10, windowMs: 60_000 }),
+  requireOwner,
+  initUpload
+);
 
-export default router
+router.post(
+  "/complete",
+  rateLimit({ key: (r) => `cmp:dv:${deviceKey(r)}`, limit: 20, windowMs: 60_000 }),
+  requireOwner,
+  completeUpload
+);
+
+export default router;
