@@ -20,6 +20,15 @@ export async function download(req: Request, res: Response) {
     if (file.status !== "ready") {
       return res.status(409).json({ message: "File not ready yet" });
     }
+        if (file.expiresAt.getTime() <= Date.now()) {
+      await deleteObject(file.s3Key).catch(() => {});
+      await File.updateOne(
+        { _id: file._id },
+        { $set: { status: "deleted", deletedAt: new Date() } }
+      );
+      return res.status(410).json({ message: "File has expired" });
+    }
+    
     if (file.passwordEnabled) {
       return res.status(200).json({
         shortCode,
@@ -30,14 +39,7 @@ export async function download(req: Request, res: Response) {
       })
     }
 
-    if (file.expiresAt.getTime() <= Date.now()) {
-      await deleteObject(file.s3Key).catch(() => {});
-      await File.updateOne(
-        { _id: file._id },
-        { $set: { status: "deleted", deletedAt: new Date() } }
-      );
-      return res.status(410).json({ message: "File has expired" });
-    }
+
 
 
     const downloadUrl = await getDownloadUrl(file.s3Key, file.fileName);

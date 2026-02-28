@@ -9,8 +9,15 @@ import file from "./routes/file.routes"
 import share from "./routes/share.routes"
 import { connectDb } from './database/connectDb';
 
+if (process.env.REDIS_URL && process.env.SMTP_USER) {
+  await import("./Worker/sendMail");
+  console.log("[worker] email worker started in-process");
+} else {
+  console.warn("[worker] skipped — REDIS_URL or SMTP_USER missing");
+}
+
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 // required for ip
 app.set("trust proxy", 1);
 
@@ -33,6 +40,7 @@ app.use("/v1/upload", upload);
 app.use("/v1/download", download);
 app.use("/v1/files", file);    
 app.use("/v1/share", share);    
+app.get("/health", (_req, res) => res.json({ ok: true }));
 
 app.use((_req, res) => {
   res.status(404).json({ message: "Not found" });
