@@ -1,2 +1,17 @@
+node_modules
+dist
+build
+coverage
+
+.env
+.env.*
+!.env.example
+
+*.log
+.DS_Store
+.vscode
+.idea
+.vercel
+
 never.txt
 project-plan.txt
