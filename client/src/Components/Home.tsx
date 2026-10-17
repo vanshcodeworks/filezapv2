@@ -15,7 +15,9 @@ import { initReceiver } from '../transfer/reciever';
 import { sendFile } from '../transfer/sender';
 
 const SIGNALING_URL =
-  import.meta.env.VITE_SIGNALING_URL ?? 'wss://filezapv2-production.up.railway.app/';
+  import.meta.env.VITE_SIGNALING_URL ?? 'wss://7s3c2mwr-8080.inc1.devtunnels.ms/';
+  // 'wss://localhost:8080';
+
 const ROOM_CODE_KEY = 'filezap:p2p-room-code';
 
 export default function Home() {

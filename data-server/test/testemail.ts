@@ -12,7 +12,7 @@ const queueEvents = new QueueEvents("share-email", {
 await queueEvents.waitUntilReady();
 
 const job = await emailQueue.add("send-share-link", {
-  toEmail: "vanshcodeworks@gmail.com",
+  toEmail: "test-recipient@example.com",
   fileName: "demo.pdf",
   link: "http://localhost:5173/download/TEST1234",
   expiresAt: new Date(Date.now() + 12 * 60 * 60 * 1000).toISOString(),
